@@ -1,0 +1,64 @@
+{
+  "name": "zotero-addon-template",
+  "version": "1.0.2",
+  "description": "Zotero Addon Template",
+  "config": {
+    "addonName": "Zotero Addon Template",
+    "addonID": "addontemplate@euclpts.com",
+    "addonRef": "addontemplate",
+    "addonInstance": "AddonTemplate",
+    "prefsPrefix": "extensions.zotero.addontemplate",
+    "releasePage": "https://github.com/windingwind/zotero-addon-template/releases",
+    "updateJSON": "https://raw.githubusercontent.com/windingwind/zotero-addon-template/main/update.json",
+    "updateBetaJSON": "https://raw.githubusercontent.com/windingwind/zotero-addon-template/main/update-beta.json"
+  },
+  "main": "src/index.ts",
+  "scripts": {
+    "build-dev": "cross-env NODE_ENV=development node scripts/build.mjs",
+    "build-prod": "cross-env NODE_ENV=production node scripts/build.mjs",
+    "build": "concurrently -c auto npm:build-prod npm:tsc",
+    "tsc": "tsc --noEmit",
+    "start": "node scripts/start.mjs",
+    "start-watch": "npm run build-dev && concurrently -c auto npm:start npm:watch",
+    "stop": "node scripts/stop.mjs",
+    "restart-dev": "npm run build-dev && npm run stop && npm run start",
+    "restart-prod": "npm run build-prod && npm run stop && npm run start",
+    "restart": "npm run restart-dev",
+    "reload": "npm run build-dev && node scripts/reload.mjs",
+    "watch": "chokidar \"src/**\" \"addon/**\" -c \"npm run reload\"",
+    "release": "release-it",
+    "lint": "prettier --write . && eslint . --ext .ts --fix",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "update-deps": "npm update --save"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/windingwind/zotero-addon-template.git"
+  },
+  "author": "windingwind",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/windingwind/zotero-addon-template/issues"
+  },
+  "homepage": "https://github.com/windingwind/zotero-addon-template#readme",
+  "dependencies": {
+    "zotero-plugin-toolkit": "^2.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.6.0",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "chokidar-cli": "^3.0.0",
+    "compressing": "^1.10.0",
+    "concurrently": "^8.2.1",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.19.2",
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.0.3",
+    "release-it": "^16.1.5",
+    "replace-in-file": "^7.0.1",
+    "typescript": "^5.2.2",
+    "zotero-types": "^1.2.3"
+  }
+}
