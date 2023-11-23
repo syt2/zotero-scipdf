@@ -1,0 +1,35 @@
+<linkset>
+  <html:link rel="localization" href="__addonRef__-preferences.ftl" />
+</linkset>
+<vbox
+  id="zotero-prefpane-__addonRef__"
+  onload="Zotero.__addonInstance__.hooks.onPrefsEvent('load', {window})"
+>
+  <groupbox>
+    <label><html:h2 data-l10n-id="pref-title"></html:h2></label>
+
+    <checkbox
+      id="zotero-prefpane-__addonRef__-autoDownload"
+      preference="extensions.zotero.__addonRef__.autoDownload"
+      data-l10n-id="pref-autoDownload"
+    />
+
+    <hbox>
+      <html:label
+        for="zotero-prefpane-__addonRef__-scihubUrl"
+        data-l10n-id="pref-scihub-input"
+      ></html:label>
+      <html:input
+        type="text"
+        id="zotero-prefpane-__addonRef__-scihubUrl"
+        preference="extensions.zotero.__addonRef__.scihubUrl"
+      ></html:input>
+    </hbox>
+  </groupbox>
+</vbox>
+<vbox>
+  <html:label
+    data-l10n-id="pref-help"
+    data-l10n-args='{"name": "__addonName__","version":"__buildVersion__"}'
+  ></html:label>
+</vbox>

@@ -1,0 +1,10 @@
+prefs-title = PDF下载
+menuitem-fetch = 获取PDF
+collectionmenuitem-fetch = 获取PDF
+menutoolsitem-fetchall = 获取所有条目的PDF
+popwin-fetching = 获取中
+popwin-fetchsuccess = 下载成功
+popwin-doimissing = DOI未找到
+popwin-pdfnotavaliable = PDF未找到
+popwin-unknownerror = 未知错误
+popwin-unknownerrorclick= 点击前往Sci-Hub

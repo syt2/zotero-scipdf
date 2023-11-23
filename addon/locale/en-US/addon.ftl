@@ -1,0 +1,10 @@
+prefs-title = PDF Download
+menuitem-fetch = Fetch PDF
+collectionmenuitem-fetch = Fetch PDF
+menutoolsitem-fetchall = Fetch PDF of All Items
+popwin-fetching = Fetching
+popwin-fetchsuccess = Download success
+popwin-doimissing = DOI is missing
+popwin-pdfnotavaliable = PDF not available
+popwin-unknownerror = Unknown Error
+popwin-unknownerrorclick= Click to the scihub page

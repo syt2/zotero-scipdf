@@ -1,0 +1,17 @@
+{
+  "addons": {
+    "pdfdownload@ytshen.com": {
+      "updates": [
+        {
+          "version": "1.0.0",
+          "update_link": "https://github.com/syt2/zotero-pdf-download/releases/latest/download/zotero-addon-template.xpi",
+          "applications": {
+            "zotero": {
+              "strict_min_version": "6.999"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
