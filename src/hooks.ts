@@ -26,10 +26,10 @@ async function onStartup() {
       const resolver = sciHubCustomResolver(url, autoDownload);
       CustomResolverManager.shared.appendCustomResolversInZotero([resolver]);
     } else {
-      CustomResolverManager.shared.appendCustomResolversInZotero([sciHubCustomResolver("https://sci-hub.se/", true)]);
+      CustomResolverManager.shared.appendCustomResolversInZotero([sciHubCustomResolver("https://sci-hub.ru/", true)]);
     }
   } else {
-    CustomResolverManager.shared.appendCustomResolversInZotero([sciHubCustomResolver("https://sci-hub.se/", true)]);
+    CustomResolverManager.shared.appendCustomResolversInZotero([sciHubCustomResolver("https://sci-hub.ru/", true)]);
   }
 
   Common.registerPrefs();
