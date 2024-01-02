@@ -18,29 +18,28 @@ function initZToolkit(_ztoolkit: ReturnType<typeof createZToolkit>) {
   const env = __env__;
   _ztoolkit.basicOptions.log.prefix = `[${config.addonName}]`;
   _ztoolkit.basicOptions.log.disableConsole = env === "production";
-  _ztoolkit.UI.basicOptions.ui.enableElementJSONLog = __env__ === "development";
-  _ztoolkit.UI.basicOptions.ui.enableElementDOMLog = __env__ === "development";
+  // _ztoolkit.UI.basicOptions.ui.enableElementJSONLog = __env__ === "development";
+  // _ztoolkit.UI.basicOptions.ui.enableElementDOMLog = __env__ === "development";
   _ztoolkit.basicOptions.debug.disableDebugBridgePassword =
     __env__ === "development";
   _ztoolkit.basicOptions.api.pluginID = config.addonID;
-  _ztoolkit.ProgressWindow.setIconURI(
-    "default",
-    `chrome://${config.addonRef}/content/icons/sci-hub-logo.svg`,
-  );
+  // _ztoolkit.ProgressWindow.setIconURI(
+  //   "default",
+  //   `chrome://${config.addonRef}/content/icons/sci-hub-logo.svg`,
+  // );
 }
 
 import { BasicTool, unregister } from "zotero-plugin-toolkit/dist/basic";
-import { UITool } from "zotero-plugin-toolkit/dist/tools/ui";
+// import { UITool } from "zotero-plugin-toolkit/dist/tools/ui";
 import { PreferencePaneManager } from "zotero-plugin-toolkit/dist/managers/preferencePane";
 
 class MyToolkit extends BasicTool {
-  UI: UITool;
-  PreferencePane: PreferencePaneManager;
+
+  // UI: UITool;
 
   constructor() {
     super();
-    this.UI = new UITool(this);
-    this.PreferencePane = new PreferencePaneManager(this);
+    // this.UI = new UITool(this);
   }
 
   unregisterAll() {

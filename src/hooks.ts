@@ -3,8 +3,9 @@ import { config } from "../package.json";
 import { initLocale } from "./utils/locale";
 import { registerPrefsScripts } from "./modules/preferenceScript";
 import { createZToolkit } from "./utils/ztoolkit";
-import { Scihub } from "./modules/fetchers/scihub";
 import { getPref, setPref } from "./utils/prefs";
+import { CustomResolverManager } from "./modules/CustomResolverManager";
+import { sciHubCustomResolver } from "./modules/CustomResolver";
 
 async function onStartup() {
   await Promise.all([
@@ -14,9 +15,24 @@ async function onStartup() {
   ]);
   initLocale();
 
-  Common.registerPrefs();
+  if (!getPref("firstInstall")) {
+    setPref("firstInstall", true);
+    const url = Zotero.Prefs.get("zoteroscihub.scihub_url");
+    let autoDownload = false;
+    if (Zotero.Prefs.get("zoteroscihub.automatic_pdf_download")) {
+      autoDownload = true;
+    }
+    if (url && typeof url === 'string') {
+      const resolver = sciHubCustomResolver(url, autoDownload);
+      CustomResolverManager.shared.appendCustomResolversInZotero([resolver]);
+    } else {
+      CustomResolverManager.shared.appendCustomResolversInZotero([sciHubCustomResolver("https://sci-hub.se/", true)]);
+    }
+  } else {
+    CustomResolverManager.shared.appendCustomResolversInZotero([sciHubCustomResolver("https://sci-hub.se/", true)]);
+  }
 
-  Common.registerNotifier();
+  Common.registerPrefs();
 
   await onMainWindowLoad(window);
 }
@@ -24,28 +40,6 @@ async function onStartup() {
 async function onMainWindowLoad(win: Window): Promise<void> {
   // Create ztoolkit for every window
   addon.data.ztoolkit = createZToolkit();
-
-  Common.registerRightClickMenuItem();
-
-  Common.registerRightClickCollectionMenuItem();
-
-  Common.registerInMenuTool();
-
-  if (!getPref("firstInstall")) {
-    setPref("firstInstall", true);
-    if (Zotero.Prefs.get("zoteroscihub.scihub_url")) {
-      setPref(
-        "scihubUrl",
-        Zotero.Prefs.get("zoteroscihub.scihub_url") as string,
-      );
-    }
-    if (Zotero.Prefs.get("zoteroscihub.automatic_pdf_download")) {
-      setPref(
-        "autoDownload",
-        Zotero.Prefs.get("zoteroscihub.automatic_pdf_download") as boolean,
-      );
-    }
-  }
 }
 
 async function onMainWindowUnload(win: Window): Promise<void> {
@@ -59,22 +53,6 @@ function onShutdown(): void {
   delete Zotero[config.addonInstance];
 }
 
-/**
- * This function is just an example of dispatcher for Notify events.
- * Any operations should be placed in a function to keep this funcion clear.
- */
-async function onNotify(
-  event: string,
-  type: string,
-  ids: Array<string | number>,
-  extraData: { [key: string]: any },
-) {
-  // You can add your code to the corresponding notify type
-  if (event === "add" && Scihub.autoDownload) {
-    const items = await Zotero.Items.getAsync(ids.map((e) => e.toString()));
-    await Scihub.updateItems(items);
-  }
-}
 
 /**
  * This function is just an example of dispatcher for Preference UI events.
@@ -101,6 +79,5 @@ export default {
   onShutdown,
   onMainWindowLoad,
   onMainWindowUnload,
-  onNotify,
   onPrefsEvent,
 };
