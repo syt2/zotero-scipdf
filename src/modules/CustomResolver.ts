@@ -33,11 +33,10 @@ export function isCustomResolverEqual(a: CustomResolver, b: CustomResolver) {
 }
 
 export function sciHubCustomResolver(url: string, automatic = true): CustomResolver {
-  url = url.trim();
   return {
     name: "Sci-Hub",
     method: "GET",
-    url: url.endsWith('/') ? `${url}{doi}` : `${url}/{doi}`,
+    url: url.includes('{doi}') ? url : url.endsWith('/') ? `${url}{doi}` : `${url}/{doi}`,
     mode: "html",
     selector: "#pdf",
     attribute: "src",
