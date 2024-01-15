@@ -7,10 +7,11 @@
 
 # 介绍
 这是一个用于 Zotero7 的 Sci-Hub 插件。  
-此插件利用了 Zotero 内自带的 [pdf resolvers](https://www.zotero.org/support/kb/custom_pdf_resolvers)方案，将 Sci-Hub 的 resolver 自动填入 `extensions.zotero.findPDFs.resolvers` 字段，以实现在zotero内从sci-hub下载pdf。
+此插件利用了 Zotero 内自带的 [PDF resolvers](https://www.zotero.org/support/kb/custom_pdf_resolvers)方案，将 Sci-Hub 的 resolver 自动填入 `extensions.zotero.findPDFs.resolvers` 字段，以实现在zotero内从sci-hub下载pdf。
 
-> [Zotero代码细节](https://github.com/zotero/zotero/blob/5536f8d2bd08ddac9074b9df05b7d205273835e7/chrome/content/zotero/xpcom/attachments.js#L1350)
-
+> [Zotero代码](https://github.com/zotero/zotero/blob/5536f8d2bd08ddac9074b9df05b7d205273835e7/chrome/content/zotero/xpcom/attachments.js#L1350)  
+> [自定义PDF resolvers](https://www.zotero.org/support/kb/custom_pdf_resolvers)  
+> [Zotero中文社区相关信息](https://zotero-chinese.com/user-guide/plugins/Zotero-scihub.html#操作步骤)  
 
 # 使用
 1. 下载并安装[最新版插件](https://github.com/syt2/zotero-scipdf/releases/latest/download/zotero-scipdf.xpi)。
