@@ -11,8 +11,9 @@ This is a Sci-Hub plugin designed for Zotero 7.
 This plugin utilizes Zotero's built-in [PDF resolvers](https://www.zotero.org/support/kb/custom_pdf_resolvers) feature.  
 It automatically writes Sci-Hub's resolver into the `extensions.zotero.findPDFs.resolvers` field and enabling automatic PDF downloads from Sci-Hub within Zotero.
 
-> [Detailed code in Zotero](https://github.com/zotero/zotero/blob/5536f8d2bd08ddac9074b9df05b7d205273835e7/chrome/content/zotero/xpcom/attachments.js#L1350)
-
+> [Detail code in Zotero](https://github.com/zotero/zotero/blob/5536f8d2bd08ddac9074b9df05b7d205273835e7/chrome/content/zotero/xpcom/attachments.js#L1350)  
+> [Custom PDF resolvers](https://www.zotero.org/support/kb/custom_pdf_resolvers)  
+> [Zotero Chinese user guide](https://zotero-chinese.com/user-guide/plugins/Zotero-scihub.html#操作步骤)  
 
 # Usage
 1. Download and install the [latest release xpi file](https://github.com/syt2/zotero-scipdf/releases/latest/download/zotero-scipdf.xpi).
