@@ -52,7 +52,7 @@
     "compressing": "^1.10.0",
     "concurrently": "^8.2.1",
     "cross-env": "^7.0.3",
-    "esbuild": "^0.19.2",
+    "esbuild": "^0.20.0",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "prettier": "^3.0.3",
