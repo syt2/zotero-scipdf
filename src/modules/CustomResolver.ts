@@ -2,9 +2,9 @@
 // https://github.com/zotero/zotero/blob/5536f8d2bd08ddac9074b9df05b7d205273835e7/chrome/content/zotero/xpcom/attachments.js#L1350
 export interface CustomResolver {
   name: string,
-  method: "GET"|"POST",
+  method: "GET" | "POST",
   url: string,  // must include {doi}
-  mode: "html"|"json",
+  mode: "html" | "json",
   selector: string,
   automatic?: boolean,
 
@@ -20,15 +20,15 @@ export interface CustomResolver {
 }
 
 export function isCustomResolverEqual(a: CustomResolver, b: CustomResolver) {
-  return a.name === b.name && 
+  return a.name === b.name &&
     a.method === b.method &&
     a.url === b.url &&
-    a.mode === b.mode && 
-    a.selector === b.selector && 
-    a.automatic === b.automatic && 
+    a.mode === b.mode &&
+    a.selector === b.selector &&
+    a.automatic === b.automatic &&
     a.attribute === b.attribute &&
     a.index === b.index &&
-    a.mappings?.url === b.mappings?.url && 
+    a.mappings?.url === b.mappings?.url &&
     a.mappings?.pageURL === b.mappings?.pageURL;
 }
 

@@ -3,7 +3,7 @@
     "scipdf@ytshen.com": {
       "updates": [
         {
-          "version": "1.0.0",
+          "version": "1.1.0",
           "update_link": "https://github.com/syt2/zotero-scipdf/releases/latest/download/zotero-scipdf.xpi",
           "applications": {
             "zotero": {
