@@ -46,10 +46,12 @@ export function sciHubCustomResolver(url: string, automatic = true): CustomResol
 
 export function presetSciHubCustomResolvers(automatic = true): Readonly<Readonly<CustomResolver>[]> {
   const scihubURLs = [
+    'https://sci-hub.ren/',
     'https://sci-hub.se/',
     'https://sci-hub.st/',
     'https://sci-hub.ru/',
-    'https://sci-hub.ren/',
+    'https://sci-hub.wf/',
+    'https://sci-hub.ee/',
   ]
   return scihubURLs.map(url => {
     return {

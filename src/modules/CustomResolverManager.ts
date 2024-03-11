@@ -35,7 +35,12 @@ export class CustomResolverManager {
   }
   private get customResolversInZotero() {
     const values = Zotero.Prefs.get(CustomResolverManager.zoteroCustomResolversPrefKey, true);
-    return typeof values === 'string' ? JSON.parse(values) as CustomResolver[] ?? [] : [];
+    if (typeof values !== 'string') { return []; }
+    let result = JSON.parse(values);
+    if (!Array.isArray(result)) {
+      result = [result];
+    }
+    return result as CustomResolver[];
   }
   private set customResolversInZotero(resolvers: CustomResolver[]) {
     Zotero.Prefs.set(CustomResolverManager.zoteroCustomResolversPrefKey, JSON.stringify(resolvers), true);
