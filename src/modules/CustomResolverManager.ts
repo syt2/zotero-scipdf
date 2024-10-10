@@ -1,4 +1,4 @@
-import { LargePrefHelper } from "zotero-plugin-toolkit/dist/helpers/largePref";
+import { LargePrefHelper } from "zotero-plugin-toolkit";
 import { config } from "../../package.json";
 import { CustomResolver, isCustomResolverEqual } from "./CustomResolver";
 

@@ -10,7 +10,8 @@ export class Common {
       image: `chrome://${config.addonRef}/content/icons/sci-hub-logo.svg`,
       defaultXUL: true,
     };
-    ztoolkit.PreferencePane.register(prefOptions);
+    ztoolkit.getGlobal("Zotero").PreferencePanes.register(prefOptions);
+    // ztoolkit.PreferencePane.register(prefOptions);
   }
 
   // // register an item in menu tools

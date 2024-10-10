@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/syt2/zotero-scipdf#readme",
   "dependencies": {
-    "zotero-plugin-toolkit": "^2.3.25"
+    "zotero-plugin-toolkit": "^4.0.6"
   },
   "devDependencies": {
     "@types/node": "^20.6.0",
