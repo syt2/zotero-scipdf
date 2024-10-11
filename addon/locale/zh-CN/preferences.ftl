@@ -1,5 +1,5 @@
-pref-title = 插件模板设置示例
-pref-enable =
-    .label = 开启
-pref-input = 输入
-pref-help = { $name } Build { $version } { $time }
+pref-title = PDF Download
+pref-autoDownload =
+    .label = 自动下载PDF
+pref-scihub-input = Scihub URL:
+pref-help = { $name } Build { $version }

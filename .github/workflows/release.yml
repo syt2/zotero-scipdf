@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - v**
+      - V**
 
 permissions:
   contents: write
@@ -38,10 +38,10 @@ jobs:
           npm run release
           sleep 1s
 
-      - name: Notify release
-        uses: apexskier/github-release-commenter@v1
-        continue-on-error: true
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          comment-template: |
-            :rocket: _This ticket has been resolved in {release_tag}. See {release_link} for release notes._
+      # - name: Notify release
+      #   uses: apexskier/github-release-commenter@v1
+      #   continue-on-error: true
+      #   with:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     comment-template: |
+      #       :rocket: _This ticket has been resolved in {release_tag}. See {release_link} for release notes._

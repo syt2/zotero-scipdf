@@ -1,23 +1,23 @@
 {
-  "name": "zotero-plugin-template",
-  "version": "3.0.1",
-  "description": "Zotero Plugin Template",
+  "name": "zotero-scipdf",
+  "version": "1.1.1",
+  "description": "Download PDF from Sci-Hub automatically For Zotero7",
   "config": {
-    "addonName": "Zotero Plugin Template",
-    "addonID": "addontemplate@euclpts.com",
-    "addonRef": "addontemplate",
-    "addonInstance": "AddonTemplate",
-    "prefsPrefix": "extensions.zotero.addontemplate"
+    "addonName": "Sci-PDF",
+    "addonID": "scipdf@ytshen.com",
+    "addonRef": "scipdf",
+    "addonInstance": "scipdf",
+    "prefsPrefix": "extensions.zotero.scipdf"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/windingwind/zotero-plugin-template.git"
+    "url": "git+https://github.com/syt2/zotero-scipdf.git"
   },
-  "author": "windingwind",
+  "author": "syt2",
   "bugs": {
-    "url": "https://github.com/windingwind/zotero-plugin-template/issues"
+    "url": "https://github.com/syt2/zotero-scipdf/issues"
   },
-  "homepage": "https://github.com/windingwind/zotero-plugin-template#readme",
+  "homepage": "https://github.com/syt2/zotero-scipdf#readme",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "zotero-plugin serve",

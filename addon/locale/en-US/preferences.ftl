@@ -1,5 +1,5 @@
-pref-title = Addon Template Example
-pref-enable =
-    .label = Enable
-pref-input = Input
-pref-help = { $name } Build { $version } { $time }
+pref-title = PDF Download
+pref-autoDownload =
+    .label = Automatic PDF Download
+pref-scihub-input = Scihub URL:
+pref-help = { $name } Build { $version }
