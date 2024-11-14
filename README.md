@@ -16,7 +16,7 @@ It automatically writes Sci-Hub's resolver into the `extensions.zotero.findPDFs.
 > [Zotero Chinese user guide](https://zotero-chinese.com/user-guide/plugins/Zotero-scihub.html#操作步骤)  
 
 # Usage
-Download and install the [latest release xpi file](https://github.com/syt2/zotero-scipdf/releases/latest/download/zotero-scipdf.xpi).
+Download and install the [latest release xpi file](https://github.com/syt2/zotero-scipdf/releases/latest/download/sci-pdf.xpi).
 
 - For items missing attachments prior to the installation of the plugin, right-click on the item and click on `Find Full Text`.
 - For newly added items with a `DOI`, if the `Automatically download PDFs` option is enabled in the preferences, Zotero will attempt to download the attachments automatically.
