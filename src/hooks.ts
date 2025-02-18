@@ -36,7 +36,9 @@ async function onStartup() {
 
   Common.registerPrefs();
 
-  await onMainWindowLoad(window);
+  await Promise.all(
+    Zotero.getMainWindows().map((win) => onMainWindowLoad(win)),
+  );
 }
 
 async function onMainWindowLoad(win: Window): Promise<void> {
@@ -54,7 +56,8 @@ function onShutdown(): void {
   addon.data.dialog?.window?.close();
   // Remove addon object
   addon.data.alive = false;
-  delete Zotero[config.addonInstance];
+  // @ts-ignore - Plugin instance is not typed
+  delete Zotero[addon.data.config.addonInstance];
 }
 
 

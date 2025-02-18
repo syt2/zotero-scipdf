@@ -6,15 +6,15 @@
   "homepage_url": "__homepage__",
   "author": "__author__",
   "icons": {
-    "48": "chrome/content/icons/sci-hub-logo.svg",
-    "96": "chrome/content/icons/sci-hub-logo.svg"
+    "48": "content/icons/sci-hub-logo.svg",
+    "96": "content/icons/sci-hub-logo.svg"
   },
   "applications": {
     "zotero": {
       "id": "__addonID__",
       "update_url": "__updateURL__",
       "strict_min_version": "6.999",
-      "strict_max_version": "7.0.*"
+      "strict_max_version": "7.*"
     }
   }
 }

@@ -21,24 +21,25 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "zotero-plugin serve",
-    "build": "tsc --noEmit && zotero-plugin build",
-    "lint": "prettier --write . && eslint . --fix",
+    "build": "zotero-plugin build && tsc --noEmit",
+    "lint:check": "prettier --check . && eslint .",
+    "lint:fix": "prettier --write . && eslint . --fix",
     "release": "zotero-plugin release",
     "test": "echo \"Error: no test specified\" && exit 1",
     "update-deps": "npm update --save"
   },
   "dependencies": {
-    "zotero-plugin-toolkit": "^4.0.6"
+    "zotero-plugin-toolkit": "^4.1.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.9.1",
-    "@types/node": "^22.7.4",
-    "eslint": "^9.12.0",
-    "prettier": "^3.3.3",
-    "typescript": "^5.6.2",
-    "typescript-eslint": "^8.8.0",
-    "zotero-plugin-scaffold": "^0.1.6",
-    "zotero-types": "^2.2.0"
+    "@eslint/js": "^9.20.0",
+    "@types/node": "^22.13.4",
+    "eslint": "^9.20.1",
+    "prettier": "^3.5.1",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.1",
+    "zotero-plugin-scaffold": "^0.2.3",
+    "zotero-types": "^3.1.7"
   },
   "prettier": {
     "printWidth": 80,
