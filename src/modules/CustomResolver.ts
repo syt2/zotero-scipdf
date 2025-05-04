@@ -49,8 +49,9 @@ export function presetSciHubCustomResolvers(automatic = true): Readonly<Readonly
     'https://sci-hub.se/',
     'https://sci-hub.st/',
     'https://sci-hub.ru/',
+    'https://sci-hub.box/',
+    'https://sci-hub.red/',
     'https://sci-hub.ren/',
-    'https://sci-hub.wf/',
     'https://sci-hub.ee/',
   ]
   return scihubURLs.map(url => {
