@@ -44,11 +44,11 @@ export async function registerPrefsScripts(_window: Window) {
     }
     urlInput.value = setedURLs.join(',');
   }
-  autoDownloadCheckbox.addEventListener("command", e => {
+  autoDownloadCheckbox.addEventListener("command", () => {
     updateResolver();
   });
 
-  urlInput.addEventListener("change", e => {
+  urlInput.addEventListener("change", () => {
     updateResolver();
   });
 }

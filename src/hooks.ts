@@ -1,4 +1,3 @@
-import { config } from "../package.json";
 import { getString, initLocale } from "./utils/locale";
 import { registerPrefsScripts } from "./modules/preferenceScript";
 import { createZToolkit } from "./utils/ztoolkit";
@@ -39,9 +38,13 @@ async function onStartup() {
   await Promise.all(
     Zotero.getMainWindows().map((win) => onMainWindowLoad(win)),
   );
+
+  // Mark initialized as true to confirm plugin loading status
+  // outside of the plugin (e.g. scaffold testing process)
+  addon.data.initialized = true;
 }
 
-async function onMainWindowLoad(win: Window): Promise<void> {
+async function onMainWindowLoad(win: _ZoteroTypes.MainWindow): Promise<void> {
   // Create ztoolkit for every window
   addon.data.ztoolkit = createZToolkit();
 }
@@ -56,7 +59,7 @@ function onShutdown(): void {
   addon.data.dialog?.window?.close();
   // Remove addon object
   addon.data.alive = false;
-  // @ts-ignore - Plugin instance is not typed
+  // @ts-expect-error - Plugin instance is not typed
   delete Zotero[addon.data.config.addonInstance];
 }
 
