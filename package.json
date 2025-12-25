@@ -1,7 +1,7 @@
 {
   "name": "zotero-scipdf",
   "version": "8.0.1",
-  "description": "Download PDF from Sci-Hub automatically For Zotero7",
+  "description": "Download PDF from Sci-Hub automatically For Zotero",
   "config": {
     "addonName": "Sci-PDF",
     "addonID": "scipdf@ytshen.com",
