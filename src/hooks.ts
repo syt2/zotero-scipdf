@@ -5,7 +5,6 @@ import { getPref, setPref } from "./utils/prefs";
 import { sciHubCustomResolver, presetSciHubCustomResolvers } from "./modules/CustomResolver";
 import { CustomResolverManager } from "./modules/CustomResolverManager";
 import { Common } from "./modules/Common";
-import * as AutoFetchPDF from "./modules/AutoFetchPDF";
 
 async function onStartup() {
   await Promise.all([
@@ -36,9 +35,6 @@ async function onStartup() {
 
   Common.registerPrefs();
 
-  // Register notifier to auto-fetch PDFs for items added via API/sync
-  AutoFetchPDF.register();
-
   await Promise.all(
     Zotero.getMainWindows().map((win) => onMainWindowLoad(win)),
   );
@@ -59,9 +55,6 @@ async function onMainWindowUnload(win: Window): Promise<void> {
 }
 
 function onShutdown(): void {
-  // Unregister auto-fetch notifier
-  AutoFetchPDF.unregister();
-
   ztoolkit.unregisterAll();
   addon.data.dialog?.window?.close();
   // Remove addon object
