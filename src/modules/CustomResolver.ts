@@ -46,22 +46,22 @@ export function sciHubCustomResolver(url: string, automatic = true): CustomResol
 
 export function presetSciHubCustomResolvers(automatic = true): Readonly<Readonly<CustomResolver>[]> {
   const scihubURLs = [
-    'https://sci-hub.se/',
+    'https://sci-hub.box/',
     'https://sci-hub.st/',
     'https://sci-hub.ru/',
-    'https://sci-hub.box/',
+    'https://sci-hub.se/',
     'https://sci-hub.red/',
     'https://sci-hub.ren/',
     'https://sci-hub.ee/',
   ]
-  return scihubURLs.map(url => {
+return scihubURLs.map(url => {
     return {
       name: "Sci-Hub",
       method: "GET",
       url: `${url}{doi}`,
       mode: "html",
-      selector: "#pdf",
-      attribute: "src",
+      selector: ".download a:first-of-type",
+      attribute: "href",
       automatic: automatic,
     };
   });
