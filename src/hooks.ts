@@ -47,6 +47,8 @@ async function onStartup() {
 async function onMainWindowLoad(win: _ZoteroTypes.MainWindow): Promise<void> {
   // Create ztoolkit for every window
   addon.data.ztoolkit = createZToolkit();
+
+  Common.registerRightClickMenuItem();
 }
 
 async function onMainWindowUnload(win: Window): Promise<void> {
