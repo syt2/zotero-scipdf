@@ -2,9 +2,11 @@ import { getString, initLocale } from "./utils/locale";
 import { registerPrefsScripts } from "./modules/preferenceScript";
 import { createZToolkit } from "./utils/ztoolkit";
 import { getPref, setPref } from "./utils/prefs";
-import { sciHubCustomResolver, presetSciHubCustomResolvers } from "./modules/CustomResolver";
-import { CustomResolverManager } from "./modules/CustomResolverManager";
 import { Common } from "./modules/Common";
+import {
+  ensureResolverSettingsInitialized,
+  syncManagedResolversFromPrefs,
+} from "./modules/ResolverSettings";
 
 async function onStartup() {
   await Promise.all([
@@ -15,23 +17,11 @@ async function onStartup() {
 
   initLocale();
 
-
   if (!getPref("firstInstall")) {
     setPref("firstInstall", true);
-    const url = Zotero.Prefs.get("zoteroscihub.scihub_url");
-    let autoDownload = false;
-    if (Zotero.Prefs.get("zoteroscihub.automatic_pdf_download")) {
-      autoDownload = true;
-    }
-    if (url && typeof url === 'string') {
-      const resolver = sciHubCustomResolver(url, autoDownload);
-      CustomResolverManager.shared.appendCustomResolversInZotero([resolver]);
-    } else {
-      CustomResolverManager.shared.appendCustomResolversInZotero(presetSciHubCustomResolvers(true));
-    }
-  } else {
-    CustomResolverManager.shared.appendCustomResolversInZotero(presetSciHubCustomResolvers(true));
   }
+  ensureResolverSettingsInitialized();
+  syncManagedResolversFromPrefs();
 
   Common.registerPrefs();
 
@@ -64,7 +54,6 @@ function onShutdown(): void {
   // @ts-expect-error - Plugin instance is not typed
   delete Zotero[addon.data.config.addonInstance];
 }
-
 
 /**
  * This function is just an example of dispatcher for Preference UI events.

@@ -14,6 +14,9 @@ export type FluentMessageId =
   | 'popwin-unknownerrorclick'
   | 'pref-autoDownload'
   | 'pref-help'
+  | 'pref-openalex-enable'
+  | 'pref-openalex-help'
+  | 'pref-openalex-key'
   | 'pref-scihub-input'
   | 'pref-title'
   | 'prefs-title';

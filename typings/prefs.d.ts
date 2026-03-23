@@ -8,6 +8,10 @@ declare namespace _ZoteroTypes {
   interface Prefs {
     PluginPrefsMap: {
       "firstInstall": boolean;
+      "automaticDownload": boolean;
+      "sciHubURLs": string;
+      "enableOpenAlex": boolean;
+      "openAlexApiKey": string;
     };
   }
 }

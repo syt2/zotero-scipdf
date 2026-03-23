@@ -1,6 +1,21 @@
 import { matchDOIs } from "./identifierPatterns";
 
 export class Utils {
+  static logTrace(
+    route: "openalex" | "scihub" | "none",
+    phase: string,
+    data: Record<string, unknown> = {},
+  ) {
+    const payload = {
+      route,
+      phase,
+      ...data,
+    };
+    const message = `[route-trace] ${JSON.stringify(payload)}`;
+    ztoolkit.log(message);
+    Zotero.debug(message);
+  }
+
   static async extractDOIs(item: Zotero.Item): Promise<string[]> {
     const dois: string[] = [];
 
@@ -40,7 +55,9 @@ export class Utils {
       referrer: "",
       cookieSandbox: null,
     };
-    ztoolkit.log(`Import Options: ${JSON.stringify(importOptions, null, "\t")}`);
+    ztoolkit.log(
+      `Import Options: ${JSON.stringify(importOptions, null, "\t")}`,
+    );
     await Zotero.Attachments.importFromURL(importOptions);
   }
 
