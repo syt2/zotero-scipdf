@@ -1,6 +1,8 @@
 import { getString } from "../utils/locale";
 import { Utils } from "../utils/utils";
+import { isSciHubCustomResolver } from "./CustomResolver";
 import { CustomResolverManager } from "./CustomResolverManager";
+import { OpenAlexFetcher } from "./OpenAlexFetcher";
 
 class PDFNotFoundError extends Error {
   constructor(message: string) {
@@ -40,8 +42,11 @@ export class SciHubFetcher {
     }
 
     for (const item of filtered) {
-      const scihubUrls = await this.buildSciHubURLs(item);
-      if (scihubUrls.length <= 0) {
+      const dois = await Utils.extractDOIs(item);
+      if (dois.length <= 0) {
+        Utils.logTrace("none", "no-doi", {
+          title: item.getDisplayTitle(),
+        });
         Utils.showPopWin(
           getString("popwin-doimissing"),
           item.getDisplayTitle(),
@@ -56,9 +61,50 @@ export class SciHubFetcher {
         item.getDisplayTitle(),
       );
 
+      try {
+        if (await OpenAlexFetcher.attachPDF(item, dois)) {
+          win.close();
+          Utils.showPopWin(
+            getString("popwin-fetchsuccess"),
+            item.getDisplayTitle(),
+            "success",
+          );
+          continue;
+        }
+      } catch (error) {
+        ztoolkit.log(
+          `openalex: failed to attach PDF for "${item.getField("title")}"`,
+          error,
+        );
+      }
+
+      const scihubUrls = this.buildSciHubURLs(dois);
+      Utils.logTrace("scihub", "fallback", {
+        title: item.getDisplayTitle(),
+        dois,
+        candidateCount: scihubUrls.length,
+      });
       let resultAction: (() => void) | undefined;
+      if (scihubUrls.length <= 0) {
+        Utils.logTrace("scihub", "miss", {
+          title: item.getDisplayTitle(),
+          reason: "no-scihub-resolver",
+        });
+        resultAction = () => {
+          Utils.showPopWin(
+            getString("popwin-pdfnotavaliable"),
+            item.getDisplayTitle(),
+            "fail",
+          );
+        };
+      }
+
       for (const scihubUrl of scihubUrls) {
         try {
+          Utils.logTrace("scihub", "try", {
+            title: item.getDisplayTitle(),
+            candidateURL: scihubUrl.href,
+          });
           await this.fetchPDF(scihubUrl, item);
           resultAction = () => {
             Utils.showPopWin(
@@ -94,8 +140,7 @@ export class SciHubFetcher {
     }
   }
 
-  private static async buildSciHubURLs(item: Zotero.Item): Promise<URL[]> {
-    const dois = await Utils.extractDOIs(item);
+  private static buildSciHubURLs(dois: string[]): URL[] {
     const baseURLs = this.baseSciHubURLs;
     const urls: URL[] = [];
     for (const doi of dois) {
@@ -111,9 +156,11 @@ export class SciHubFetcher {
   }
 
   private static get baseSciHubURLs(): string[] {
-    const resolvers = CustomResolverManager.shared.customResolvers;
+    const resolvers = CustomResolverManager.shared.customResolvers.filter(
+      isSciHubCustomResolver,
+    );
     if (resolvers.length <= 0) {
-      return ["https://sci-hub.se/"];
+      return [];
     }
     return resolvers.map((r) => {
       // resolver.url is like "https://sci-hub.se/{doi}", extract the base
@@ -140,10 +187,26 @@ export class SciHubFetcher {
       const pdfUrl = new URL(rawPDFUrl, scihubUrl.href);
       pdfUrl.protocol = "https:";
       await Utils.attachRemotePDF(pdfUrl, item);
+      Utils.logTrace("scihub", "success", {
+        title: item.getDisplayTitle(),
+        sourceURL: scihubUrl.href,
+        pdfURL: pdfUrl.href,
+      });
     } else if (xhr.status === 200 && this.pdfNotAvailable(body)) {
+      Utils.logTrace("scihub", "miss", {
+        title: item.getDisplayTitle(),
+        sourceURL: scihubUrl.href,
+        reason: "pdf-not-available",
+      });
       ztoolkit.log(`scihub: PDF is not available at the moment "${scihubUrl}"`);
       throw new PDFNotFoundError(`PDF is not available: ${scihubUrl}`);
     } else {
+      Utils.logTrace("scihub", "error", {
+        title: item.getDisplayTitle(),
+        sourceURL: scihubUrl.href,
+        status: xhr.status,
+        statusText: xhr.statusText,
+      });
       ztoolkit.log(`scihub: failed to fetch PDF from "${scihubUrl}"`);
       throw new Error(xhr.statusText);
     }

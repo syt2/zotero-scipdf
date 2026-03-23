@@ -1,5 +1,9 @@
 pref-title = PDF Download
 pref-autoDownload =
     .label = 自動下載PDF
-pref-scihub-input = Scihub URL:
+pref-openalex-enable =
+    .label = 優先透過 OpenAlex 取得開放獲取 PDF
+pref-openalex-key = OpenAlex API Key:
+pref-openalex-help = OpenAlex 只提供開放獲取連結，且目前需要 API Key。
+pref-scihub-input = Sci-Hub URL:
 pref-help = { $name } Build { $version }
