@@ -1,5 +1,6 @@
 import { getString } from "../utils/locale";
 import { Utils } from "../utils/utils";
+import { defaultSciHubURLs } from "./CustomResolver";
 import { CustomResolverManager } from "./CustomResolverManager";
 
 class PDFNotFoundError extends Error {
@@ -113,10 +114,10 @@ export class SciHubFetcher {
   private static get baseSciHubURLs(): string[] {
     const resolvers = CustomResolverManager.shared.customResolvers;
     if (resolvers.length <= 0) {
-      return ["https://sci-hub.se/"];
+      return [...defaultSciHubURLs];
     }
     return resolvers.map((r) => {
-      // resolver.url is like "https://sci-hub.se/{doi}", extract the base
+      // resolver.url is like "https://sci-hub.ru/{doi}", extract the base
       return r.url.replace(/\{doi\}.*$/, "");
     });
   }

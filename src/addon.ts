@@ -18,6 +18,7 @@ class Addon {
       window: Window;
     };
     dialog?: DialogHelper;
+    registeredMenuIDs: string[];
   };
   // Lifecycle hooks
   public hooks: typeof hooks;
@@ -31,6 +32,7 @@ class Addon {
       env: __env__,
       initialized: false,
       ztoolkit: createZToolkit(),
+      registeredMenuIDs: [],
     };
     this.hooks = hooks;
     this.api = {};
