@@ -2,7 +2,11 @@ import { getString, initLocale } from "./utils/locale";
 import { registerPrefsScripts } from "./modules/preferenceScript";
 import { createZToolkit } from "./utils/ztoolkit";
 import { getPref, setPref } from "./utils/prefs";
-import { sciHubCustomResolver, presetSciHubCustomResolvers } from "./modules/CustomResolver";
+import {
+  sciHubCustomResolver,
+  presetSciHubCustomResolvers,
+  isObsoleteDefaultSciHubResolver,
+} from "./modules/CustomResolver";
 import { CustomResolverManager } from "./modules/CustomResolverManager";
 import { Common } from "./modules/Common";
 
@@ -15,6 +19,9 @@ async function onStartup() {
 
   initLocale();
 
+  CustomResolverManager.shared.removeCustomResolversMatching(
+    isObsoleteDefaultSciHubResolver,
+  );
 
   if (!getPref("firstInstall")) {
     setPref("firstInstall", true);
@@ -23,17 +30,21 @@ async function onStartup() {
     if (Zotero.Prefs.get("zoteroscihub.automatic_pdf_download")) {
       autoDownload = true;
     }
-    if (url && typeof url === 'string') {
+    if (url && typeof url === "string") {
       const resolver = sciHubCustomResolver(url, autoDownload);
       CustomResolverManager.shared.appendCustomResolversInZotero([resolver]);
     } else {
-      CustomResolverManager.shared.appendCustomResolversInZotero(presetSciHubCustomResolvers(true));
+      CustomResolverManager.shared.appendCustomResolversInZotero(
+        presetSciHubCustomResolvers(true),
+      );
     }
   } else {
-    CustomResolverManager.shared.appendCustomResolversInZotero(presetSciHubCustomResolvers(true));
+    CustomResolverManager.shared.appendCustomResolversInZotero(
+      presetSciHubCustomResolvers(true),
+    );
   }
 
-  Common.registerPrefs();
+  await Common.registerPrefs();
 
   await Promise.all(
     Zotero.getMainWindows().map((win) => onMainWindowLoad(win)),
@@ -57,6 +68,7 @@ async function onMainWindowUnload(win: Window): Promise<void> {
 }
 
 function onShutdown(): void {
+  Common.unregisterMenus();
   ztoolkit.unregisterAll();
   addon.data.dialog?.window?.close();
   // Remove addon object
@@ -64,7 +76,6 @@ function onShutdown(): void {
   // @ts-expect-error - Plugin instance is not typed
   delete Zotero[addon.data.config.addonInstance];
 }
-
 
 /**
  * This function is just an example of dispatcher for Preference UI events.

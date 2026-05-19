@@ -1,5 +1,8 @@
 import { defineConfig } from "zotero-plugin-scaffold";
+import { resolve } from "node:path";
 import pkg from "./package.json";
+
+const srcEntry = resolve("src/index.ts").replace(/\\/g, "/");
 
 export default defineConfig({
   source: ["src", "addon"],
@@ -28,12 +31,12 @@ export default defineConfig({
     },
     esbuildOptions: [
       {
-        entryPoints: ["src/index.ts"],
+        entryPoints: [srcEntry],
         define: {
           __env__: `"${process.env.NODE_ENV}"`,
         },
         bundle: true,
-        target: "firefox115",
+        target: "firefox140",
         outfile: `.scaffold/build/addon/content/scripts/${pkg.config.addonRef}.js`,
       },
     ],
@@ -42,7 +45,7 @@ export default defineConfig({
     bumpp: {
       commit: "chore(publish): release V%s",
       tag: "V%s",
-    }
+    },
   },
 
   test: {
