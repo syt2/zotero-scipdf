@@ -1,7 +1,7 @@
-var SciPDF_Preferences = {
+globalThis.SciPDF_Preferences = {
   init(win) {
-    return Zotero.__addonInstance__.hooks.onPrefsEvent("load", {
-      window: win || window,
+    return globalThis.Zotero.__addonInstance__.hooks.onPrefsEvent("load", {
+      window: win || globalThis.window,
     });
   },
 };

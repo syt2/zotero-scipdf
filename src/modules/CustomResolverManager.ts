@@ -67,12 +67,8 @@ export class CustomResolverManager {
   removeCustomResolversMatching(
     predicate: (resolver: CustomResolver) => boolean,
   ) {
-    this.customResolversInZotero = this.customResolversInZotero.filter(
-      (value) => !predicate(value),
-    );
-    this.customResolvers = this.customResolvers.filter(
-      (value) => !predicate(value),
-    );
+    const trackedResolvers = this.customResolvers.filter(predicate);
+    this.removeCustomResolversInZotero(trackedResolvers);
   }
   private get customResolversInZotero() {
     const values = Zotero.Prefs.get(
