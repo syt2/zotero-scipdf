@@ -78,9 +78,10 @@ Use a separate Zotero 9 profile and a backed-up test library.
    edit the URLs, close Settings, reopen it, and confirm the values persist.
 4. Right-click a regular library item and confirm “Find and Download Available
    PDF” is present. Confirm a discoverable PDF is attached automatically. For a
-   failed single-item lookup, confirm Google Scholar opens a DOI search or an
-   exact-title search when the DOI is absent. Right-click multiple items, notes,
-   or attachments and confirm the separate Scholar command is hidden.
+   failed single-item lookup, confirm DefineABC opens a DOI search or an
+   exact-title search when the DOI is absent, and complete any slider challenge
+   manually. Confirm the separate DefineABC and Google Scholar commands work for
+   one regular item and are hidden for multiple items, notes, or attachments.
 5. Test one item with a DOI and no attachment. Confirm the progress state, PDF
    import, parent linkage, filename, and PDF reader opening.
 6. Test an item that already has a PDF, with both the manual command and Zotero's

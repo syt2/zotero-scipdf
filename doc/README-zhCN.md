@@ -18,9 +18,9 @@
 
 下载并安装[最新版插件](https://github.com/syt2/zotero-scipdf/releases/latest/download/zotero-scipdf.xpi)。
 
-- 对缺少附件的一个或多个条目，右键点击`一键查找并下载可用 PDF`。插件会依次尝试 DOI 页面、条目 URL、开放获取来源和 PMCID，找到后自动保存为条目附件。单篇自动查找失败时，会继续打开 Google Scholar 作为人工兜底。
+- 对缺少附件的一个或多个条目，右键点击`一键查找并下载可用 PDF`。插件会依次尝试 DOI 页面、条目 URL、开放获取来源和 PMCID，找到后自动保存为条目附件。单篇自动查找失败时，会继续打开 DefineABC 作为人工兜底。
 - 对于新增的带有`DOI`的条目，如果在首选项内勾选了`自动下载PDF`选项，则Zotero会自动尝试下载附件
-- 如需通过浏览器查找可访问版本，请选择一个普通条目并点击`在 Google Scholar 中查找`。插件会优先使用 DOI，缺失 DOI 时使用完整标题进行精确检索。
+- 如需通过浏览器查找可访问版本，请选择一个普通条目并点击`在 DefineABC 中查找`或`在 Google Scholar 中查找`。插件会优先使用 DOI，缺失 DOI 时使用完整标题进行精确检索；DefineABC 的滑动验证由用户在浏览器中完成。
 
 ### 增加/删除Sci-Hub站点
 

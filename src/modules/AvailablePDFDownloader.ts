@@ -1,4 +1,4 @@
-import { GoogleScholarLookup } from "./GoogleScholarLookup";
+import { DefineABCLookup } from "./DefineABCLookup";
 
 export class AvailablePDFDownloader {
   static async download(items: Zotero.Item[]): Promise<void> {
@@ -16,13 +16,14 @@ export class AvailablePDFDownloader {
     });
 
     // Avoid opening one browser tab per item for bulk operations. For a single
-    // failed lookup, Google Scholar is a useful interactive final fallback.
+    // failed lookup, DefineABC is an interactive fallback that exposes direct
+    // PDF links when available. Its slider verification remains in-browser.
     if (
       regularItems.length === 1 &&
       !(await this.hasPDF(regularItems[0])) &&
-      GoogleScholarLookup.canOpen(regularItems[0])
+      DefineABCLookup.canOpen(regularItems[0])
     ) {
-      GoogleScholarLookup.open(regularItems[0]);
+      DefineABCLookup.open(regularItems[0]);
     }
   }
 

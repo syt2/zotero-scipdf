@@ -22,12 +22,14 @@ Download and install the [latest release xpi file](https://github.com/syt2/zoter
 - For items missing attachments, right-click one or more items and choose
   `Find and Download Available PDF`. Zotero first tries the DOI page, item URL,
   open-access sources, and PMCID, then attaches a discovered PDF automatically.
-  If a single-item lookup fails, the plugin opens Google Scholar as the final
-  interactive fallback.
+  If a single-item lookup fails, the plugin opens DefineABC as an interactive
+  fallback. Google Scholar remains available as a separate menu command.
 - For newly added items with a `DOI`, if the `Automatically download PDFs` option is enabled in the preferences, Zotero will attempt to download the attachments automatically.
 - To search interactively for an accessible copy, select one regular item and
-  choose `Find with Google Scholar`. The DOI is used when available; otherwise,
-  the plugin searches for the exact title in your browser.
+  choose `Find with DefineABC` or `Find with Google Scholar`. The DOI is used
+  when available; otherwise, the plugin searches for the exact title in your
+  browser. DefineABC slider verification is intentionally completed by the user
+  rather than bypassed in the background.
 
 ### Add/Remove Sci-Hub Sites
 

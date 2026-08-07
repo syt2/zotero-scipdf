@@ -1,6 +1,7 @@
 import { config } from "../../package.json";
 import { getString } from "../utils/locale";
 import { AvailablePDFDownloader } from "./AvailablePDFDownloader";
+import { DefineABCLookup } from "./DefineABCLookup";
 import { GoogleScholarLookup } from "./GoogleScholarLookup";
 
 export class Common {
@@ -49,6 +50,28 @@ export class Common {
             void AvailablePDFDownloader.download(
               context.items?.filter((item) => item.isRegularItem()) ?? [],
             ).catch(logError);
+          },
+        },
+        {
+          menuType: "menuitem",
+          onShowing: (_event, context) => {
+            const item = context.items?.filter((item) => item.isRegularItem());
+            (context.menuElem as XULMenuItemElement).label =
+              getString("menuitem-defineabc");
+            context.setVisible(
+              item?.length === 1 && DefineABCLookup.canOpen(item[0]),
+            );
+          },
+          onCommand: (_event, context) => {
+            const item = context.items?.filter((item) => item.isRegularItem());
+            if (item?.length !== 1) {
+              return;
+            }
+            try {
+              DefineABCLookup.open(item[0]);
+            } catch (error) {
+              logError(error);
+            }
           },
         },
         {

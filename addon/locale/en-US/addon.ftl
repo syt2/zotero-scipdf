@@ -1,5 +1,6 @@
 prefs-title = PDF Download
 menuitem-fetch = Find and Download Available PDF
+menuitem-defineabc = Find with DefineABC
 menuitem-google-scholar = Find with Google Scholar
 collectionmenuitem-fetch = Fetch PDF
 menutoolsitem-fetchall = Fetch PDF of All Items
