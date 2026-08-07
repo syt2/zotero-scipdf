@@ -19,7 +19,11 @@ It automatically writes Sci-Hub's resolver into the `extensions.zotero.findPDFs.
 
 Download and install the [latest release xpi file](https://github.com/syt2/zotero-scipdf/releases/latest/download/sci-pdf.xpi).
 
-- For items missing attachments prior to the installation of the plugin, right-click on the item and click on `Find Full Text`.
+- For items missing attachments, right-click one or more items and choose
+  `Find and Download Available PDF`. Zotero first tries the DOI page, item URL,
+  open-access sources, and PMCID, then attaches a discovered PDF automatically.
+  If a single-item lookup fails, the plugin opens Google Scholar as the final
+  interactive fallback.
 - For newly added items with a `DOI`, if the `Automatically download PDFs` option is enabled in the preferences, Zotero will attempt to download the attachments automatically.
 - To search interactively for an accessible copy, select one regular item and
   choose `Find with Google Scholar`. The DOI is used when available; otherwise,

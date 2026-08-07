@@ -1,5 +1,5 @@
 prefs-title = PDF下載
-menuitem-fetch = 獲取PDF
+menuitem-fetch = 一鍵查找並下載可用 PDF
 menuitem-google-scholar = 在 Google Scholar 中查找
 collectionmenuitem-fetch = 獲取PDF
 menutoolsitem-fetchall = 獲取所有項目的PDF

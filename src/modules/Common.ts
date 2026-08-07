@@ -1,7 +1,7 @@
 import { config } from "../../package.json";
 import { getString } from "../utils/locale";
+import { AvailablePDFDownloader } from "./AvailablePDFDownloader";
 import { GoogleScholarLookup } from "./GoogleScholarLookup";
-import { SciHubFetcher } from "./SciHubFetcher";
 
 export class Common {
   private static preferencePaneID?: string;
@@ -46,9 +46,8 @@ export class Common {
             );
           },
           onCommand: (_event, context) => {
-            void SciHubFetcher.updateItems(
+            void AvailablePDFDownloader.download(
               context.items?.filter((item) => item.isRegularItem()) ?? [],
-              false,
             ).catch(logError);
           },
         },
