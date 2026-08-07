@@ -1,5 +1,6 @@
 prefs-title = PDF Download
 menuitem-fetch = Fetch PDF
+menuitem-google-scholar = Find with Google Scholar
 collectionmenuitem-fetch = Fetch PDF
 menutoolsitem-fetchall = Fetch PDF of All Items
 popwin-fetching = Fetching

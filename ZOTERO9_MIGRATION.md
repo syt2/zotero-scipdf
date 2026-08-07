@@ -77,7 +77,9 @@ Use a separate Zotero 9 profile and a backed-up test library.
 3. Open Settings → Sci-PDF. Confirm the checkbox and resolver URL field load,
    edit the URLs, close Settings, reopen it, and confirm the values persist.
 4. Right-click a regular library item and confirm “Fetch PDF” is present.
-   Right-click only notes or attachments and confirm it is hidden.
+   Confirm “Find with Google Scholar” opens a DOI search for a single item and
+   an exact-title search when the DOI is absent. Right-click multiple items,
+   notes, or attachments and confirm the Scholar command is hidden.
 5. Test one item with a DOI and no attachment. Confirm the progress state, PDF
    import, parent linkage, filename, and PDF reader opening.
 6. Test an item that already has a PDF, with both the manual command and Zotero's

@@ -21,6 +21,9 @@ Download and install the [latest release xpi file](https://github.com/syt2/zoter
 
 - For items missing attachments prior to the installation of the plugin, right-click on the item and click on `Find Full Text`.
 - For newly added items with a `DOI`, if the `Automatically download PDFs` option is enabled in the preferences, Zotero will attempt to download the attachments automatically.
+- To search interactively for an accessible copy, select one regular item and
+  choose `Find with Google Scholar`. The DOI is used when available; otherwise,
+  the plugin searches for the exact title in your browser.
 
 ### Add/Remove Sci-Hub Sites
 

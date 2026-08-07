@@ -1,5 +1,6 @@
 import { config } from "../../package.json";
 import { getString } from "../utils/locale";
+import { GoogleScholarLookup } from "./GoogleScholarLookup";
 import { SciHubFetcher } from "./SciHubFetcher";
 
 export class Common {
@@ -49,6 +50,29 @@ export class Common {
               context.items?.filter((item) => item.isRegularItem()) ?? [],
               false,
             ).catch(logError);
+          },
+        },
+        {
+          menuType: "menuitem",
+          onShowing: (_event, context) => {
+            const item = context.items?.filter((item) => item.isRegularItem());
+            (context.menuElem as XULMenuItemElement).label = getString(
+              "menuitem-google-scholar",
+            );
+            context.setVisible(
+              item?.length === 1 && GoogleScholarLookup.canOpen(item[0]),
+            );
+          },
+          onCommand: (_event, context) => {
+            const item = context.items?.filter((item) => item.isRegularItem());
+            if (item?.length !== 1) {
+              return;
+            }
+            try {
+              GoogleScholarLookup.open(item[0]);
+            } catch (error) {
+              logError(error);
+            }
           },
         },
       ],

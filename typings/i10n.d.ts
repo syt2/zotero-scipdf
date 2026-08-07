@@ -5,6 +5,7 @@
 export type FluentMessageId =
   | 'collectionmenuitem-fetch'
   | 'menuitem-fetch'
+  | 'menuitem-google-scholar'
   | 'menutoolsitem-fetchall'
   | 'popwin-doimissing'
   | 'popwin-fetching'
