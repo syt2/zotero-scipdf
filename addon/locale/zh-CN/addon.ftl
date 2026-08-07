@@ -1,5 +1,7 @@
 prefs-title = PDF下载
-menuitem-fetch = 获取PDF
+menuitem-fetch = 一键查找并下载可用 PDF
+menuitem-defineabc = 在 DefineABC 中查找
+menuitem-google-scholar = 在 Google Scholar 中查找
 collectionmenuitem-fetch = 获取PDF
 menutoolsitem-fetchall = 获取所有条目的PDF
 popwin-fetching = 获取中

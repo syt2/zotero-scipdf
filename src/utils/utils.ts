@@ -28,19 +28,19 @@ export class Utils {
     return dois;
   }
 
-  static async attachRemotePDF(pdfURL: URL, item: Zotero.Item) {
-    const filename = pdfURL.pathname.split("/").pop() || null;
+  static async attachRemotePDF(pdfURL: URL, item: Zotero.Item, referrer?: URL) {
     const importOptions = {
       libraryID: item.libraryID,
       url: pdfURL.href,
       parentItemID: item.id,
       title: item.getField("title"),
-      fileBaseName: filename,
+      fileBaseName: Zotero.Attachments.getFileBaseNameFromItem(item),
       contentType: "application/pdf",
-      referrer: "",
-      cookieSandbox: null,
+      referrer: referrer?.href,
     };
-    ztoolkit.log(`Import Options: ${JSON.stringify(importOptions, null, "\t")}`);
+    ztoolkit.log(
+      `Import Options: ${JSON.stringify(importOptions, null, "\t")}`,
+    );
     await Zotero.Attachments.importFromURL(importOptions);
   }
 

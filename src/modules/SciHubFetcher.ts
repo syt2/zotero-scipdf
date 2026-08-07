@@ -1,5 +1,6 @@
 import { getString } from "../utils/locale";
 import { Utils } from "../utils/utils";
+import { defaultSciHubURLs } from "./CustomResolver";
 import { CustomResolverManager } from "./CustomResolverManager";
 
 class PDFNotFoundError extends Error {
@@ -113,7 +114,7 @@ export class SciHubFetcher {
   private static get baseSciHubURLs(): string[] {
     const resolvers = CustomResolverManager.shared.customResolvers;
     if (resolvers.length <= 0) {
-      return ["https://sci-hub.se/"];
+      return [...defaultSciHubURLs];
     }
     return resolvers.map((r) => {
       // resolver.url is like "https://sci-hub.se/{doi}", extract the base
@@ -129,17 +130,16 @@ export class SciHubFetcher {
           "Mozilla/5.0 (iPhone; CPU iPhone OS 11_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1",
       },
     });
-    const rawPDFUrl = xhr.responseXML
-      ?.querySelector("#pdf")
-      ?.getAttribute("src");
-    const body = xhr.responseXML?.querySelector("body");
+    const document = xhr.response as Document | null;
+    const rawPDFUrl = document?.querySelector("#pdf")?.getAttribute("src");
+    const body = document?.querySelector("body");
 
     if (xhr.status === 200 && rawPDFUrl) {
       // new URL() handles absolute, protocol-relative, root-relative,
       // and relative paths correctly using scihubUrl as the base.
-      const pdfUrl = new URL(rawPDFUrl, scihubUrl.href);
+      const pdfUrl = new URL(rawPDFUrl, xhr.responseURL || scihubUrl.href);
       pdfUrl.protocol = "https:";
-      await Utils.attachRemotePDF(pdfUrl, item);
+      await Utils.attachRemotePDF(pdfUrl, item, scihubUrl);
     } else if (xhr.status === 200 && this.pdfNotAvailable(body)) {
       ztoolkit.log(`scihub: PDF is not available at the moment "${scihubUrl}"`);
       throw new PDFNotFoundError(`PDF is not available: ${scihubUrl}`);

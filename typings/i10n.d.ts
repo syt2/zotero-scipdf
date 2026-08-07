@@ -4,7 +4,9 @@
 // @ts-nocheck
 export type FluentMessageId =
   | 'collectionmenuitem-fetch'
+  | 'menuitem-defineabc'
   | 'menuitem-fetch'
+  | 'menuitem-google-scholar'
   | 'menutoolsitem-fetchall'
   | 'popwin-doimissing'
   | 'popwin-fetching'
