@@ -28,7 +28,7 @@ async function startup({ id, version, resourceURI, rootURI }, reason) {
   ctx._globalThis = ctx;
 
   Services.scriptloader.loadSubScript(
-    `${rootURI}/content/scripts/__addonRef__.js`,
+    `${rootURI}content/scripts/__addonRef__.js`,
     ctx,
   );
   await Zotero.__addonInstance__.hooks.onStartup();
