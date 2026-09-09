@@ -8,3 +8,7 @@ popwin-doimissing = DOI is missing
 popwin-pdfnotavaliable = PDF not available
 popwin-unknownerror = Unknown Error
 popwin-unknownerrorclick= Click to the scihub page
+popwin-cancelhint = Click to cancel remaining downloads. An attachment import already started may finish.
+popwin-fetchprogress = Item { $item }/{ $items }, mirror { $mirror }/{ $mirrors }: { $host } — { $title }
+popwin-cancelled = Cancelled
+popwin-fetchfailed = Download failed; check network, mirror availability, and debug output

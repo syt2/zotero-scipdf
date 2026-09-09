@@ -39,58 +39,94 @@ export class SciHubFetcher {
       return;
     }
 
-    for (const item of filtered) {
+    const state = {
+      cancelled: false,
+      cancelRequest: undefined as (() => void) | undefined,
+    };
+    // Do not retry a throttled host again in this batch.
+    const throttledHosts = new Set<string>();
+    for (const [itemIndex, item] of filtered.entries()) {
+      if (state.cancelled) break;
       const scihubUrls = await this.buildSciHubURLs(item);
-      if (scihubUrls.length <= 0) {
+      if (!scihubUrls.length) {
         Utils.showPopWin(
           getString("popwin-doimissing"),
           item.getDisplayTitle(),
           "fail",
         );
-        ztoolkit.log(`DOI Not Found for "${item.getField("title")}"`);
         continue;
       }
-
       const win = Utils.showPopWin(
         getString("popwin-fetching"),
         item.getDisplayTitle(),
+        "default",
+        0,
       );
-
-      let resultAction: (() => void) | undefined;
-      for (const scihubUrl of scihubUrls) {
-        try {
-          await this.fetchPDF(scihubUrl, item);
-          resultAction = () => {
-            Utils.showPopWin(
-              getString("popwin-fetchsuccess"),
-              item.getDisplayTitle(),
-              "success",
-            );
-          };
-          break;
-        } catch (error) {
-          if (error instanceof PDFNotFoundError) {
-            resultAction = () => {
-              Utils.showPopWin(
-                getString("popwin-pdfnotavaliable"),
-                item.getDisplayTitle(),
-                "fail",
-              );
-            };
-          } else {
-            resultAction = () => {
-              Utils.showPopWin(
-                getString("popwin-unknownerror"),
-                item.getDisplayTitle(),
-                "fail",
-                5000,
-              );
-            };
+      win.addDescription(getString("popwin-cancelhint"));
+      const close = win.win.close.bind(win.win);
+      // Zotero's close-on-click calls this method. Programmatic cleanup uses close directly.
+      win.win.close = () => {
+        state.cancelled = true;
+        state.cancelRequest?.();
+        close();
+      };
+      let success = false;
+      let allNotFound = true;
+      try {
+        for (const [mirrorIndex, scihubUrl] of scihubUrls.entries()) {
+          if (state.cancelled) break;
+          if (throttledHosts.has(scihubUrl.host)) {
+            allNotFound = false;
+            continue;
+          }
+          win.changeLine({
+            text: getString("popwin-fetchprogress", {
+              args: {
+                item: itemIndex + 1,
+                items: filtered.length,
+                mirror: mirrorIndex + 1,
+                mirrors: scihubUrls.length,
+                host: scihubUrl.host,
+                title: item.getDisplayTitle(),
+              },
+            }),
+            progress: (mirrorIndex / scihubUrls.length) * 100,
+          });
+          try {
+            await this.fetchPDF(scihubUrl, item, state);
+            success = !state.cancelled;
+            break;
+          } catch (error) {
+            if (state.cancelled) break;
+            const status = (error as { status?: number } | null)?.status;
+            if (status === 429 || status === 503)
+              throttledHosts.add(scihubUrl.host);
+            allNotFound &&= error instanceof PDFNotFoundError;
+            Zotero.debug(`[Sci-PDF] ${scihubUrl.href}: ${String(error)}`);
+          } finally {
+            state.cancelRequest = undefined;
           }
         }
+      } finally {
+        win.win.close = close;
+        close();
       }
-      win.close();
-      resultAction?.();
+      if (state.cancelled) {
+        Utils.showPopWin(getString("popwin-cancelled"), item.getDisplayTitle());
+        break;
+      }
+      Utils.showPopWin(
+        getString(
+          success
+            ? "popwin-fetchsuccess"
+            : allNotFound
+              ? "popwin-pdfnotavaliable"
+              : "popwin-fetchfailed",
+        ),
+        item.getDisplayTitle(),
+        success ? "success" : "fail",
+        5000,
+      );
     }
   }
 
@@ -121,14 +157,33 @@ export class SciHubFetcher {
     });
   }
 
-  private static async fetchPDF(scihubUrl: URL, item: Zotero.Item) {
+  private static async fetchPDF(
+    scihubUrl: URL,
+    item: Zotero.Item,
+    state: { cancelled: boolean; cancelRequest?: () => void },
+  ) {
     const xhr = await Zotero.HTTP.request("GET", scihubUrl.href, {
       responseType: "document",
+      timeout: 15000,
+      errorDelayMax: 0,
+      // Handle status codes ourselves, avoiding automatic Retry-After waits on Z7 too.
+      successCodes: false,
+      cancellerReceiver: (cancel: () => void) => {
+        state.cancelRequest = cancel;
+        if (state.cancelled) cancel();
+      },
       headers: {
         "User-Agent":
           "Mozilla/5.0 (iPhone; CPU iPhone OS 11_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1",
       },
     });
+    state.cancelRequest = undefined;
+    if (state.cancelled) return;
+    if (xhr.status !== 200) {
+      throw Object.assign(new Error(`HTTP ${xhr.status} ${xhr.statusText}`), {
+        status: xhr.status,
+      });
+    }
     const rawPDFUrl = xhr.responseXML
       ?.querySelector("#pdf")
       ?.getAttribute("src");

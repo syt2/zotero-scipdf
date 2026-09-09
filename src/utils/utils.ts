@@ -2,11 +2,17 @@ import { matchDOIs } from "./identifierPatterns";
 
 export class Utils {
   static async extractDOIs(item: Zotero.Item): Promise<string[]> {
+    // A valid explicit DOI takes precedence over references in title/extra.
+    const explicitDOI = item.getField("DOI");
+    if (typeof explicitDOI === "string") {
+      const matches = matchDOIs(explicitDOI.trim());
+      if (matches.length) return matches;
+    }
     const dois: string[] = [];
 
     const extract = (text: string) => {
       for (const doi of matchDOIs(text)) {
-        if (!dois.includes(doi)) {
+        if (!dois.some((value) => value.toLowerCase() === doi.toLowerCase())) {
           dois.push(doi);
         }
       }
@@ -40,7 +46,9 @@ export class Utils {
       referrer: "",
       cookieSandbox: null,
     };
-    ztoolkit.log(`Import Options: ${JSON.stringify(importOptions, null, "\t")}`);
+    ztoolkit.log(
+      `Import Options: ${JSON.stringify(importOptions, null, "\t")}`,
+    );
     await Zotero.Attachments.importFromURL(importOptions);
   }
 

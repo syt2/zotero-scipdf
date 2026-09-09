@@ -8,3 +8,7 @@ popwin-doimissing = DOI未找到
 popwin-pdfnotavaliable = PDF未找到
 popwin-unknownerror = 未知错误
 popwin-unknownerrorclick= 点击前往Sci-Hub
+popwin-cancelhint = 点击取消后续下载。已开始的附件导入可能仍会完成。
+popwin-fetchprogress = 文献 { $item }/{ $items }，镜像 { $mirror }/{ $mirrors }：{ $host } — { $title }
+popwin-cancelled = 已取消
+popwin-fetchfailed = 下载失败，请检查网络、镜像可用性及调试日志
