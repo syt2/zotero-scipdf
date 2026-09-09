@@ -11,7 +11,6 @@ export class Common {
       src: rootURI + "content/preferences.xhtml",
       label: getString("prefs-title"),
       image: `chrome://${config.addonRef}/content/icons/sci-hub-logo.svg`,
-      scripts: ["content/scripts/preferences.js"],
       defaultXUL: true,
     };
     await ztoolkit.getGlobal("Zotero").PreferencePanes.register(prefOptions);

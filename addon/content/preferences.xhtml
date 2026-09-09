@@ -1,7 +1,8 @@
 <linkset>
   <html:link rel="localization" href="__addonRef__-preferences.ftl" />
 </linkset>
-<vbox id="zotero-prefpane-__addonRef__" onload="SciPDF_Preferences.init(window)">
+<!-- Inline handlers run in the window, not the preference script sandbox. -->
+<vbox id="zotero-prefpane-__addonRef__" onload="Zotero.__addonInstance__.hooks.onPrefsEvent('load', { window })">
   <groupbox>
     <label>
       <html:h2 data-l10n-id="pref-title"></html:h2>

@@ -30,7 +30,10 @@ async function onStartup() {
       CustomResolverManager.shared.appendCustomResolversInZotero(presetSciHubCustomResolvers(true));
     }
   } else {
-    CustomResolverManager.shared.appendCustomResolversInZotero(presetSciHubCustomResolvers(true));
+    // Restore saved choices without re-adding defaults or enabling downloads.
+    CustomResolverManager.shared.appendCustomResolversInZotero(
+      CustomResolverManager.shared.customResolvers,
+    );
   }
 
   await Common.registerPrefs();
