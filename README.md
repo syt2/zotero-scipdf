@@ -1,13 +1,13 @@
 # SciPDF For Zotero
 
-[![zotero target version](https://img.shields.io/badge/Zotero-7+-green?style=flat-square&logo=zotero&logoColor=CC2936)](https://www.zotero.org)
+[![zotero target version](https://img.shields.io/badge/Zotero-7%20to%2010-green?style=flat-square&logo=zotero&logoColor=CC2936)](https://www.zotero.org)
 [![Using Zotero Plugin Template](https://img.shields.io/badge/Using-Zotero%20Plugin%20Template-blue?style=flat-square&logo=github)](https://github.com/windingwind/zotero-plugin-template)
 
 English | [简体中文](doc/README-zhCN.md)
 
 
 # Introduction
-This is a Sci-Hub plugin designed for Zotero 7 and Zotero 8.  
+This is a Sci-Hub plugin designed for Zotero 7 through Zotero 10.  
 This plugin utilizes Zotero's built-in [PDF resolvers](https://www.zotero.org/support/kb/custom_pdf_resolvers) feature.  
 It automatically writes Sci-Hub's resolver into the `extensions.zotero.findPDFs.resolvers` field and enabling automatic PDF downloads from Sci-Hub within Zotero.
 
@@ -27,3 +27,21 @@ Upon first installation, the plugin will come pre-configured with some common Sc
 # FAQs
 - Items missing a `DOI` do not have the "Find Full Text" option and cannot be downloaded via Sci-Hub.
 - Items that already have associated attachments do not have the `Find Full Text` option.
+
+### "The Sci-Hub mirrors are blocking automated requests"
+
+Most Sci-Hub mirrors now answer automated requests with an anti-bot interstitial
+instead of the article page, and they do it with a **200 OK** status:
+
+| Mirror | Response | Challenge |
+| --- | --- | --- |
+| `sci-hub.ru` | HTTP 200 | Altcha robot check ("проверка на робота") |
+| `sci-hub.st`, `sci-hub.box` | HTTP 403 | DDoS-Guard |
+
+Because the body is non-empty and the status is successful, this used to look
+like a network or plugin failure. The plugin now detects these interstitials and
+tells you so, showing the mirror URL so you can open it in a browser and pass the
+check once, or switch to another mirror in the settings.
+
+Zotero's own HTTP stack cannot solve these challenges, and the plugin does not
+try to: the check is there to stop exactly this kind of automated access.
