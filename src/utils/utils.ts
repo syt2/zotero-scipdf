@@ -34,17 +34,45 @@ export class Utils {
     return dois;
   }
 
+  /**
+   * Basename of a URL path with a trailing `.pdf` removed.
+   *
+   * `Zotero.Attachments.importFromURL()` appends the extension it detects to
+   * `fileBaseName`, so passing the full URL basename produced `paper.pdf.pdf`
+   * and defeated Zotero's automatic renaming (issue #86).
+   */
+  static pdfFileBaseName(pdfURL: URL): string | null {
+    const basename = pdfURL.pathname.split("/").pop() || "";
+    let name = basename;
+    try {
+      name = decodeURIComponent(basename);
+    } catch {
+      // Keep the raw (possibly percent-encoded) name if it is malformed.
+    }
+    const withoutExtension = name
+      .replace(/\.pdf$/i, "")
+      // Decoding may reintroduce path separators, which are not valid in a
+      // filename (Zotero 10 rejects them outright).
+      .replace(/[/\\]/g, "_")
+      .trim();
+    return withoutExtension || null;
+  }
+
   static async attachRemotePDF(pdfURL: URL, item: Zotero.Item) {
-    const filename = pdfURL.pathname.split("/").pop() || null;
+    const fileBaseName = Utils.pdfFileBaseName(pdfURL);
     const importOptions = {
       libraryID: item.libraryID,
       url: pdfURL.href,
       parentItemID: item.id,
       title: item.getField("title"),
-      fileBaseName: filename,
+      // Omitted when the URL yields nothing usable, so Zotero falls back to
+      // deriving the name from the URL itself.
+      ...(fileBaseName ? { fileBaseName } : {}),
       contentType: "application/pdf",
       referrer: "",
-      cookieSandbox: null,
+      // Zotero 10 removed `Zotero.CookieSandbox`, and `importFromURL()` no
+      // longer reads a `cookieSandbox` option. Isolated cookies are now set up
+      // with `Zotero.HTTP.newCookieContext()` and passed as `userContextId`.
     };
     ztoolkit.log(
       `Import Options: ${JSON.stringify(importOptions, null, "\t")}`,
