@@ -54,21 +54,26 @@ test("missing DOI still falls back to URL and preserves complete letter suffixes
   entry.getField = (field) => (field === "url" ? `https://doi.org/${doi}` : "");
   assert.deepEqual(Array.from(await Utils.extractDOIs(entry)), [doi]);
 });
-function harness(request) {
+function harness(request, opts = {}) {
   const windows = [],
     calls = [],
     imports = [];
   const ui = {
     ...Utils,
     extractDOIs: Utils.extractDOIs,
-    attachRemotePDF: async (url) => imports.push(url.href),
+    attachRemotePDF:
+      opts.attachRemotePDF ??
+      (async (url) => imports.push(url.href)),
     showPopWin: (title, text, type, closeTime) => {
       const w = {
         title,
         closeTime,
         closed: false,
         updates: [],
-        addDescription() {},
+        descriptions: [],
+        addDescription(description) {
+          this.descriptions.push(description);
+        },
         changeLine(line) {
           this.updates.push(line);
         },
@@ -207,4 +212,147 @@ test("all mirrors explicitly missing the PDF produce the not-found result", asyn
   await h.run([item()]);
   assert.equal(h.calls.length, 2);
   assert.equal(h.windows.at(-1).title, "popwin-pdfnotavaliable");
+});
+
+// Anti-bot interstitials, copied from live responses (Oct 2026):
+// sci-hub.ru answers HTTP 200 with an Altcha robot check, sci-hub.st and
+// sci-hub.box answer HTTP 403 with a DDoS-Guard challenge.
+const captchaPage = () => ({
+  status: 200,
+  statusText: "OK",
+  responseXML: {
+    documentElement: {
+      innerHTML:
+        '<head><title translate="ru:title">Sci-Hub: проверка на робота</title>' +
+        '<script async defer src="/scripts/altcha.min.js" type="module"></script></head>' +
+        '<body><div class="question"><altcha-widget challengeurl="/captcha/challenge/82908121"></altcha-widget></div></body>',
+    },
+    querySelector: () => null,
+  },
+});
+const ddosGuardPage = () => ({
+  status: 403,
+  statusText: "Forbidden",
+  responseXML: {
+    documentElement: {
+      innerHTML:
+        '<html><head><title>DDoS-Guard</title>' +
+        '<script src="/.well-known/ddos-guard/js-challenge/index.js"></script></head>' +
+        '<body data-ddg-origin="true"><h1 id="ddg-l10n-title">Checking your browser</h1></body></html>',
+    },
+    querySelector: () => null,
+  },
+});
+test("a 200 robot-check page is reported as blocked, not as a generic failure", async () => {
+  const h = harness(() => captchaPage());
+  await h.run([item()]);
+  assert.equal(h.calls.length, 2);
+  assert.equal(h.imports.length, 0);
+  const last = h.windows.at(-1);
+  assert.equal(last.title, "popwin-mirrorblocked");
+  // Stays on screen: passing the check needs a manual action.
+  assert.equal(last.closeTime, 0);
+  // Carries the mirror URL so it can be opened in a browser.
+  assert.equal(last.descriptions.length, 1);
+  assert.ok(last.descriptions[0].startsWith("https://"));
+});
+test("a blocked host is not revisited for the remaining items", async () => {
+  const h = harness(() => captchaPage());
+  await h.run([item(), item()]);
+  // Both mirrors are probed once for the first item, then skipped entirely.
+  assert.equal(h.calls.length, 2);
+});
+test("a DDoS-Guard 403 is treated as blocking rather than a plain HTTP error", async () => {
+  const h = harness(() => ddosGuardPage());
+  await h.run([item()]);
+  assert.equal(h.windows.at(-1).title, "popwin-mirrorblocked");
+});
+// sci-hub.ee serves a Cloudflare Turnstile gate with HTTP 200 when the article
+// has to be fetched on demand ("Verification - Sci-Hub").
+const turnstilePage = () => ({
+  status: 200,
+  statusText: "OK",
+  responseXML: {
+    documentElement: {
+      innerHTML:
+        '<html><head><title>Verification - Sci-Hub</title></head><body>' +
+        '<p>Please complete the check to continue.</p>' +
+        '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>' +
+        '<script>fetch("/api/verify-turnstile", { method: "POST" })</script>' +
+        "</body></html>",
+    },
+    querySelector: () => null,
+  },
+});
+test("a Turnstile verification page is reported as blocked", async () => {
+  const h = harness(() => turnstilePage());
+  await h.run([item()]);
+  assert.equal(h.calls.length, 2);
+  assert.equal(h.imports.length, 0);
+  assert.equal(h.windows.at(-1).title, "popwin-mirrorblocked");
+});
+test("mixing blocking and missing PDFs is not reported as blocked", async () => {
+  const h = harness(({ calls }) =>
+    calls.length === 1 ? captchaPage() : page(200),
+  );
+  await h.run([item()]);
+  // One mirror blocked and one reporting "not found" is ambiguous, so neither
+  // the blocked nor the not-found wording is accurate.
+  assert.equal(h.windows.at(-1).title, "popwin-fetchfailed");
+});
+
+test("a failing PDF download reports the underlying error, not a generic message", async () => {
+  const h = harness(
+    () => page(200, true),
+    {
+      attachRemotePDF: async () => {
+        throw Object.assign(
+          new Error(
+            "HTTP GET https://pdf.example/test.pdf failed with status code 403",
+          ),
+          { status: 403 },
+        );
+      },
+    },
+  );
+  await h.run([item()]);
+  const last = h.windows.at(-1);
+  assert.equal(last.title, "popwin-fetchfailed");
+  assert.match(last.descriptions.join(" "), /403/);
+});
+test("issue 86: the .pdf extension is not duplicated in the attachment name", () => {
+  assert.equal(Utils.pdfFileBaseName(new URL("https://x/paper.pdf")), "paper");
+  assert.equal(Utils.pdfFileBaseName(new URL("https://x/a/b/2024.PDF")), "2024");
+  // Only a trailing .pdf is stripped; dots inside the name are kept.
+  assert.equal(Utils.pdfFileBaseName(new URL("https://x/v1.2.pdf")), "v1.2");
+  assert.equal(Utils.pdfFileBaseName(new URL("https://x/download")), "download");
+  // Nothing usable to name the file with: Zotero derives it from the URL.
+  assert.equal(Utils.pdfFileBaseName(new URL("https://x/")), null);
+});
+
+test("DOIs followed by sentence punctuation are still extracted in full", () => {
+  const doi = "10.1038/s41567-025-02822-y";
+  for (const text of [
+    `see ${doi}.`,
+    `${doi}, and more`,
+    `(${doi})`,
+    `${doi};`,
+    `"${doi}"`,
+    `see ${doi} for details`,
+    `[${doi}]`,
+  ]) {
+    assert.deepEqual(Array.from(identifiers.matchDOIs(text)), [doi], text);
+  }
+});
+
+test("balanced parentheses inside a DOI suffix are preserved", () => {
+  const doi = "10.1016/S0022-2836(02)00001-2";
+  assert.deepEqual(
+    Array.from(identifiers.matchDOIs(`ref ${doi}.`)),
+    [doi],
+  );
+  assert.deepEqual(
+    Array.from(identifiers.matchDOIs(`see (${doi})`)),
+    [doi],
+  );
 });

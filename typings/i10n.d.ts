@@ -13,6 +13,7 @@ export type FluentMessageId =
   | 'popwin-fetching'
   | 'popwin-fetchprogress'
   | 'popwin-fetchsuccess'
+  | 'popwin-mirrorblocked'
   | 'popwin-pdfnotavaliable'
   | 'popwin-unknownerror'
   | 'popwin-unknownerrorclick'
