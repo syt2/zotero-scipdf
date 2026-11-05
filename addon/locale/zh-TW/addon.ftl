@@ -12,3 +12,4 @@ popwin-cancelhint = 點擊取消後續下載。已開始的附件匯入可能仍
 popwin-fetchprogress = 文獻 { $item }/{ $items }，鏡像 { $mirror }/{ $mirrors }：{ $host } — { $title }
 popwin-cancelled = 已取消
 popwin-fetchfailed = 下載失敗，請檢查網路、鏡像可用性及除錯日誌
+popwin-mirrorblocked = Sci-Hub 鏡像正在攔截自動請求（人機驗證 / DDoS 防護）。請在瀏覽器開啟該鏡像連結完成驗證，或在設定中更換可用鏡像。

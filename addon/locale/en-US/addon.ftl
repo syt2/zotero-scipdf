@@ -12,3 +12,4 @@ popwin-cancelhint = Click to cancel remaining downloads. An attachment import al
 popwin-fetchprogress = Item { $item }/{ $items }, mirror { $mirror }/{ $mirrors }: { $host } — { $title }
 popwin-cancelled = Cancelled
 popwin-fetchfailed = Download failed; check network, mirror availability, and debug output
+popwin-mirrorblocked = The Sci-Hub mirrors are blocking automated requests (robot check / DDoS protection). Open the mirror link in a browser to pass the check, or configure another mirror in the settings.
